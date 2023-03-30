@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
 
+
 //CREATE POST
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body);
@@ -38,6 +39,23 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//ADD COMMENT TO POST
+router.post("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    const newComment = {
+      profilePic: req.body.profilePic,
+      username: req.body.username,
+      commentText: req.body.commentText,
+    };
+    post.comments.push(newComment);
+    const updatedPost = await post.save();
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //DELETE POST
 router.delete("/:id", async (req, res) => {
   try {
@@ -61,6 +79,7 @@ router.delete("/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    
     res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
@@ -74,13 +93,16 @@ router.get("/", async (req, res) => {
   try {
     let posts;
     if (username) {
+      console.log(1);
       posts = await Post.find({ username });
     } else if (catName) {
+      
       posts = await Post.find({
         categories: {
           $in: [catName],
         },
       });
+      
     } else {
       posts = await Post.find();
     }

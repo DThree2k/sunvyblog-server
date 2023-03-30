@@ -4,19 +4,22 @@ const Post = require("../models/Post");
 const bcrypt = require("bcrypt");
 
 //UPDATE
-router.put("/:id", async (req, res) => {
+router.put("/:id" ,async (req, res) => {
+  const user = await User.findById(req.params.id);
   if (req.body.userId === req.params.id) {
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
-    }
-    try {
+    const salt = await bcrypt.genSalt(10);
+    {req.body.password === user.password ? (req.body.password) : (req.body.password = await bcrypt.hash(req.body.password, salt))}
+    try {  
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         {
           $set: req.body,
         },
         { new: true }
+      );
+      await Post.updateMany(
+        { username: user.username },
+        { $set: { profilePic: updatedUser.profilePic, username: updatedUser.username } }
       );
       res.status(200).json(updatedUser);
     } catch (err) {
@@ -26,6 +29,22 @@ router.put("/:id", async (req, res) => {
     res.status(401).json("You can update only your account!");
   }
 });
+// router.put("/:username", async (req, res) => {
+//   const { username } = req.params.username;
+//   const { newUsername, newProfilePic } = req.body;
+
+//   try {
+//     const updatedPosts = await Post.updateMany(
+//       { username: username },
+//       { $set: { username: newUsername, profilePic: newProfilePic } },
+//       { new: true }
+//     );
+
+//     res.status(200).json(updatedPosts);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 //DELETE
 router.delete("/:id", async (req, res) => {
