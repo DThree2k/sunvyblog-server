@@ -7,6 +7,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 const postRoute = require("./routes/posts");
 const categoryRoute = require("./routes/categories");
+const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 app.use(cors());
@@ -15,6 +16,11 @@ app.use(cors({
   origin: '*',
   optionsSuccessStatus: 200
 }));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 app.use("/images", express.static(path.join(__dirname, "/images")));
 
 mongoose
@@ -40,6 +46,7 @@ const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json("File has been uploaded");
 });
+
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);

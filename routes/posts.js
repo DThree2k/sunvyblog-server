@@ -4,6 +4,7 @@ const Post = require("../models/Post");
 
 
 //CREATE POST
+
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body);
   try {
@@ -90,10 +91,10 @@ router.get("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   const username = req.query.user;
   const catName = req.query.cat;
+  const search = req.query.q;
   try {
     let posts;
     if (username) {
-      console.log(1);
       posts = await Post.find({ username });
     } else if (catName) {
       
@@ -103,9 +104,35 @@ router.get("/", async (req, res) => {
         },
       });
       
-    } else {
+    } 
+    else if (search) {
+      posts = await Post.find({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { categories: { $regex: search, $options: "i" } },
+          { username: { $regex: search, $options: "i" } },
+        ],
+      });
+    }
+     else {
       posts = await Post.find();
     }
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+router.get("/search/:keyword", async (req, res) => {
+  const searchQuery  = req.params.keyword;
+  try {
+    let posts;
+     posts = await Post.find({
+      $or: [
+        { title: { $regex: searchQuery, $options: "i" } },
+        { categories: { $regex: searchQuery, $options: "i" } },
+        { username: { $regex: searchQuery, $options: "i" } },
+      ],
+    });
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json(err);
