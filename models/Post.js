@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const shortid = require('shortid');
 const CommentSchema = new mongoose.Schema({
   profilePic: {
     type: String,
@@ -18,6 +18,12 @@ const CommentSchema = new mongoose.Schema({
 
 const PostSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      default: () => shortid.generate()
+    },
     title: {
       type: String,
       required: true,
@@ -25,6 +31,11 @@ const PostSchema = new mongoose.Schema(
     },
     desc: {
       type: String,
+      required: true,
+    },
+    status: {
+      type: Boolean,
+      default: true,
       required: true,
     },
     photoDesc: {
@@ -52,9 +63,21 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: 0,
+    },
+    bookmarks: {
+      type: [String],
+      default: []
     }
   },
   { timestamps: true }
 );
-
+PostSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    // Chuyển đổi _id thành id kiểu String
+    ret.id = ret._id.toString();
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  }
+});
 module.exports = mongoose.model("Post", PostSchema);
