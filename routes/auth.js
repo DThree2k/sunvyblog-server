@@ -105,7 +105,7 @@ router.post("/resend-otp", async (req, res) => {
       `,
     };
     const myAccessTokenObject = await myOAuth2Client.getAccessToken()
-    const myAccessToken = myAccessTokenObject?.token
+    const myAccessToken = myAccessTokenObject && myAccessTokenObject.token;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
