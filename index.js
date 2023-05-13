@@ -10,6 +10,8 @@ const reportRoute = require("./routes/reports");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+//pm2 start index.js
+//pm2 stop index.js
 app.use(cors());
 dotenv.config();
 app.use(cors({
@@ -54,6 +56,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/reports", reportRoute);
 
 //80
-app.listen("5000", () => {
+app.listen("80", () => {
   console.log("Backend is running.");
 });
