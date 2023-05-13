@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
     newUser.otpCreatedAt = new Date(); // Thời điểm tạo mã OTP
     const user = await newUser.save();
     const myAccessTokenObject = await myOAuth2Client.getAccessToken()
-    const myAccessToken = myAccessTokenObject?.token
+    const myAccessToken = myAccessTokenObject && myAccessTokenObject.token;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
