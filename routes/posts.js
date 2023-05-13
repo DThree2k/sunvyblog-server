@@ -85,42 +85,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//GET ALL POSTS STATUS TRUE
-router.get("/", async (req, res) => {
-  const username = req.query.user;
-  const catName = req.query.cat;
-  const search = req.query.q;
-  try {
-    let posts;
-    if (username) {
-      posts = await Post.find({ username, status: true }).sort({ createdAt: -1 });
-    } else if (catName) {
-      posts = await Post.find({
-        categories: {
-          $in: [catName],
-        },
-        status: true
-      }).sort({ createdAt: -1 });
-      
-    } 
-    else if (search) {
-      posts = await Post.find({
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { categories: { $regex: search, $options: "i" } },
-          { username: { $regex: search, $options: "i" } },
-        ],
-        status: true
-      }).sort({ createdAt: -1 });
-    }
-     else {
-      posts = await Post.find({status: true});
-    }
-    res.status(200).json(posts);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 //GET ALL POSTS
 router.get("/adminPosts", async (req, res) => {
   try {
@@ -157,6 +122,42 @@ router.get("/newest", async (req, res) => {
   res.status(500).json(err);
   }
   });
+  //GET ALL POSTS STATUS TRUE
+router.get("/", async (req, res) => {
+  const username = req.query.user;
+  const catName = req.query.cat;
+  const search = req.query.q;
+  try {
+    let posts;
+    if (username) {
+      posts = await Post.find({ username, status: true }).sort({ createdAt: -1 });
+    } else if (catName) {
+      posts = await Post.find({
+        categories: {
+          $in: [catName],
+        },
+        status: true
+      }).sort({ createdAt: -1 });
+      
+    } 
+    else if (search) {
+      posts = await Post.find({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { categories: { $regex: search, $options: "i" } },
+          { username: { $regex: search, $options: "i" } },
+        ],
+        status: true
+      }).sort({ createdAt: -1 });
+    }
+     else {
+      posts = await Post.find({status: true});
+    }
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 // GET TOP 10 NEWEST POSTS BY AUTHOR
   router.get("/newest/:username", async (req, res) => {
     try {
