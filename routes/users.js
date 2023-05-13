@@ -4,12 +4,12 @@ const Post = require("../models/Post");
 const bcrypt = require("bcrypt");
 
 //UPDATE
-router.put("/:id" ,async (req, res) => {
+router.put("/:id", async (req, res) => {
   const user = await User.findById(req.params.id);
   if (req.body.userId === req.params.id) {
     const salt = await bcrypt.genSalt(10);
-    {req.body.password === user.password ? (req.body.password) : (req.body.password = await bcrypt.hash(req.body.password, salt))}
-    try {  
+    { req.body.password === user.password ? (req.body.password) : (req.body.password = await bcrypt.hash(req.body.password, salt)) }
+    try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         {
@@ -50,7 +50,7 @@ router.put('/lock/:username', async (req, res) => {
     const { username } = req.params;
     const { status } = req.body;
     const updatedUser = await User.findOneAndUpdate({ username }, { status: status }, { new: true });
-    res.json(updatedUser);  
+    res.json(updatedUser);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server error');
@@ -103,7 +103,9 @@ router.get("/", async (req, res) => {
 
     // Tạo một object mới chứa thông tin user và số bài viết của user
     const result = users.map(user => {
-      const postCount = posts.find(post => post._id === user.username)?.count ?? 0; // Tìm số bài viết của user
+      const foundPost = posts.find(post => post._id === user.username);
+      const postCount = foundPost ? foundPost.count : 0;
+      // Tìm số bài viết của user
       return {
         id: user.id,
         username: user.username,
