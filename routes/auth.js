@@ -5,9 +5,9 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const { OAuth2Client } = require("google-auth-library");
 
-const GOOGLE_MAILER_CLIENT_ID = '501351886225-1gcg1ljuaetj2a1pvdbg9b5o11gvh32b.apps.googleusercontent.com'
-const GOOGLE_MAILER_CLIENT_SECRET = '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'
-const GOOGLE_MAILER_REFRESH_TOKEN = '1//04gCw7KeqT7anCgYIARAAGAQSNwF-L9Irbaw6yZHcd30c6H6LSfvsfe4td8GqWREoQILGJePcQybdPFTdWVKq3HfHooRsMolcK_w'
+const GOOGLE_MAILER_CLIENT_ID = '530277630554-ovd0c7mj1n1omdthq86qus3e8v40hqrr.apps.googleusercontent.com'
+const GOOGLE_MAILER_CLIENT_SECRET = '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'
+const GOOGLE_MAILER_REFRESH_TOKEN = '1//044aq9J5mQUFFCgYIARAAGAQSNwF-L9IrUJURpZyP3gznpIXwV9e7ubmjFBj6p3UmhcMTqSS6eHEEzrrIAZaNdnsS5ClCbRXGFMs'
 const ADMIN_EMAIL_ADDRESS = 'dthree2882000@gmail.com'
 const myOAuth2Client = new OAuth2Client(
   GOOGLE_MAILER_CLIENT_ID,

@@ -54,6 +54,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/reports", reportRoute);
 
 //80
-app.listen(80, () => {
+app.listen("80", () => {
   console.log("Backend is running.");
 });
